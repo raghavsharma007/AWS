@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Estimated Date</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/8aa13c88ab.js"></script>
+
+    <style>
+
+        body{
+            background: #fff;
+        }
+
+        .logo{
+            border-bottom: 5px solid #e7692f;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            padding: 0.25em 1em;
+            display: flex;
+            justify-content: space-between;
+            z-index: 9999;
+        }
+
+        .logo .img-logo{
+            flex: 1;
+        }
+
+        .logo .navbar{
+            flex: flex-end;
+        }
+
+        .logout-icon{
+            padding-right: 0.5em;
+        }
+
+        .logo .navbar .nav .nav-items a{
+            color: #e7692f;
+            text-decoration: none;
+            padding: .5rem;
+            border-radius: 4px;
+            border: 1px solid #e7692f;
+            transition: background 0.3s ease-in-out;
+            outline: none;
+            appearance: none;
+            font-size: .8rem;
+        }
+
+        .logo .navbar .nav .nav-items a:hover{
+            background: #e7692f;
+            color: #fff;
+
+        }
+
+        .navigation{
+            margin-top: 5rem;
+            position: fixed;
+            top: -8px;
+            left: 0;
+            width: 10%;
+            height: 100%;
+            background: #f0f0f0;
+            border-right: 5px solid #e7692f;
+        }
+
+        .navigation ul{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-top: 2.5rem;
+            margin-left: -2.5rem;
+        }
+
+        .navigation ul li{
+            list-style-type: none;
+            color: #000;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .navigation ul li:hover{
+            background: #9e9e9e;
+        }
+
+        .navigation ul li:hover a{
+            color: #fff !important;
+        }
+
+        .navigation ul li a{
+            display: block;
+            color: #000;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            width: 100%;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .active{
+            background: #e7692f;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .active{
+            color: #fff !important;
+        }
+
+        .cont,
+        .cont2{
+            margin-top: 6rem;
+            margin-bottom: 1rem;
+            margin-left: 10%;
+            display: grid;
+            justify-content: center;
+            align-items: center;
+            width: 90%;
+        }
+
+        .cont2{
+<!--            display: none;-->
+        }
+
+        .client-details{
+            border: 1px solid #5d5d5d;
+            border-collapse: collapse;
+            border-style: hidden;
+            border-radius: 10px;
+            width: 100%;
+            table-layout: fixed;
+            background: #fff;
+        }
+
+        .client-details thead{
+            filter: drop-shadow(-1px 3px 3px rgba(0, 0, 0, 0.2));
+        }
+
+        .client-details th{
+            padding: 1em;
+        }
+
+        .client-details td{
+            padding: 0.5em 1em;
+        }
+
+        .client-details th{
+            background: #5d5d5d;
+            color: #fff;
+        }
+
+        .client-details tr:first-child th:first-child {
+          border-top-left-radius: 10px;
+        }
+
+        .client-details tr:first-child th:last-child {
+          border-top-right-radius: 10px;
+        }
+
+        .tb-content{
+          height: calc(100vh - 12em);
+          overflow-x:auto;
+          width: 100%;
+          border: 1px solid rgba(255,255,255,0.3);
+          box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+        }
+
+        .tb-content tr{
+            font-size: 0.8em;
+        }
+
+        .tb-content::-webkit-scrollbar-track{
+            background-color: #ccc;
+        }
+
+        .tb-content::-webkit-scrollbar{
+            width: 5px;
+            background-color: #5d5d5d;
+
+        }
+
+        .tb-content::-webkit-scrollbar-thumb{
+            background-color: #5d5d5d;
+            border: 2px solid #3f3f3f;
+            border-radius: 100px;
+        }
+
+        .tb-content .client-details tr{
+            border-bottom: 1px solid #5d5d5d30;
+        }
+
+        .tb-content .client-details tr:nth-child(even){
+            background: #f0f0f0;
+        }
+
+        .req{
+            overflow-x: auto;
+        }
+
+        .ctype{
+            width: 250px;
+        }
+
+        .app{
+            width: 300px;
+        }
+
+
+        .approval-form{
+            display: flex;
+            flex-direction: row;
+        }
+
+        .approval-form .fa-check{
+            color: #1ecd35;
+            transition: all 0.2s ease-in-out;
+            outline: none;
+            appearance: none;
+            border: none;
+        }
+
+        .approval-form .fa-check:hover{
+            color: #298936;
+            outline: none;
+            appearance: none;
+            border: none;
+        }
+
+        .approval-form .fa-times{
+            color: tomato;
+            transition: all 0.2s ease-in-out;
+            outline: none;
+            appearance: none;
+            border: none;
+        }
+
+        .approval-form .fa-times:hover{
+            color: red;
+            outline: none;
+            appearance: none;
+            border: none;
+        }
+
+        .approval-form textarea{
+            width: 15rem !important;
+            height: 30px;
+            font-size: 0.8em;
+        }
+
+        .lds-roller {
+          display: inline-block;
+          position: relative;
+          width: 64px;
+          height: 64px;
+        }
+        .lds-roller div {
+          animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+          transform-origin: 32px 32px;
+        }
+        .lds-roller div:after {
+          content: " ";
+          display: block;
+          position: absolute;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #fff;
+          margin: -3px 0 0 -3px;
+        }
+        .lds-roller div:nth-child(1) {
+          animation-delay: -0.036s;
+        }
+        .lds-roller div:nth-child(1):after {
+          top: 50px;
+          left: 50px;
+        }
+        .lds-roller div:nth-child(2) {
+          animation-delay: -0.072s;
+        }
+        .lds-roller div:nth-child(2):after {
+          top: 54px;
+          left: 45px;
+        }
+        .lds-roller div:nth-child(3) {
+          animation-delay: -0.108s;
+        }
+        .lds-roller div:nth-child(3):after {
+          top: 57px;
+          left: 39px;
+        }
+        .lds-roller div:nth-child(4) {
+          animation-delay: -0.144s;
+        }
+        .lds-roller div:nth-child(4):after {
+          top: 58px;
+          left: 32px;
+        }
+        .lds-roller div:nth-child(5) {
+          animation-delay: -0.18s;
+        }
+        .lds-roller div:nth-child(5):after {
+          top: 57px;
+          left: 25px;
+        }
+        .lds-roller div:nth-child(6) {
+          animation-delay: -0.216s;
+        }
+        .lds-roller div:nth-child(6):after {
+          top: 54px;
+          left: 19px;
+        }
+        .lds-roller div:nth-child(7) {
+          animation-delay: -0.252s;
+        }
+        .lds-roller div:nth-child(7):after {
+          top: 50px;
+          left: 14px;
+        }
+        .lds-roller div:nth-child(8) {
+          animation-delay: -0.288s;
+        }
+        .lds-roller div:nth-child(8):after {
+          top: 45px;
+          left: 10px;
+        }
+        @keyframes lds-roller {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+
+        div.pageloader {
+          position: absolute;
+          top: 0;
+          bottom: 0%;
+          left: 0;
+          right: 0%;
+          width: 100%;
+          height: 100%;
+          display: grid;
+          justify-content: center;
+          align-items: center;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 99;
+          display: none;
+        }
+
+        .date-form{
+            display: flex;
+        }
+
+        .date-form input{
+            outline: none;
+            appearance: none;
+        }
+
+        input[type='date']{
+            border: none;
+            background: none;
+            border: 1px solid #333;
+            border-radius: 10px;
+            width: 10rem;
+            appearance: none;
+            outline: none;
+            margin-right: 0.5rem;
+        }
+        input[type='date']::-webkit-inner-spin-button {
+            display: none;
+        }
+        input[type='date']::-webkit-datetime-edit-text {
+            padding: 0 0.3em;
+        }
+        input[type='date']::-webkit-datetime-edit {
+            padding: 0.2em 1em;
+        }
+        input[type='date']::-webkit-calendar-picker-indicator {
+            background: none;
+            color: #e7692f;
+        }
+        .btn-save{
+            border: none;
+            appearance: none;
+            background: none;
+            color: #6382d8;
+            border: 1px solid transparent;
+            padding: 0.45rem .5rem;
+            border-radius: 100px;
+            transition: border 0.2s ease-out;
+        }
+        .btn-save:hover{
+            border: 1px solid #6382d8;
+            transition: border 0.2s ease-in;
+        }
+
+        .btn-close{
+            border: none;
+            background: none;
+            border: 1px solid #868686;
+            border-radius: 10px;
+            transition: all 0.2s ease-out;
+        }
+
+        .btn-close:hover{
+            background: #868686;
+            color: #fff;
+            transition: all 0.2s ease-in;
+        }
+
+        .divider{
+            border-left: 1px solid #9c9c9c;
+            height: 2.7em;
+            display: block;
+            margin-top: -4px;
+            margin-bottom: -4px;
+            margin-right: .5rem;
+        }
+
+        .cname{
+            width: 150px;
+        }
+
+        .reqcd{
+            width: 200px;
+        }
+
+        .setest{
+            width: 270px;
+        }
+
+    </style>
+
+
+</head>
+<body>
+<div class="pageloader" id="pageLoader">
+    <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+</div>
+
+ <div class="logo">
+     <div class="img-logo">
+        <img src="https://s3-ap-southeast-1.amazonaws.com/dataflow-dfgcorp/wp-content/uploads/2017/01/16145628/logo_new.png" alt="logo" width= "60px" height="60px">
+    </div>
+     <nav class="navbar">
+        <ul class="nav">
+            <li class="nav-items">
+                <a href="{% url 'infofill:logout_itapp' %}"><i class="fas fa-power-off logout-icon"></i><strong>Logout</strong></a>
+            </li>
+        </ul>
+    </nav>
+ </div>
+
+<div class="navigation">
+    <ul>
+        <li class="">
+            <a href="#" class="tablinks active">Active</a>
+        </li>
+        <li>
+            <a href="{% url 'infofill:estdategiven' %}" class="tablinks" >Completed</a>
+        </li>
+    </ul>
+</div>
+
+<div class="container-fluid cont tabcontent" id="Active2">
+    <div class="tb-header">
+        <table  class="client-details" cellpadding="4">
+            <thead>
+                <tr>
+                    <th  class="cname">Cient name</th>
+                    <th>Request Synopsis</th>
+                    <th>Client Type</th>
+                    <th class="reqcd">Request receive date</th>
+                    <th>Target launch date</th>
+                    <th>Estimated Date</th>
+            <!--        <th>Actual live date</th>-->
+            <!--        <th>Ontime Status</th>-->
+            <!--        <th>Current status</th>-->
+            <!--        <th>Approval</th>-->
+            <!--        <th>Remarks</th>-->
+            <!--        <th>Action</th>-->
+                    <th class="setest">Set estimated Date</th>
+                  </tr>
+            </thead>
+        </table>
+    </div>
+
+    <div class="tb-content">
+        <table class="client-details" cellpadding="4">
+
+        {% for i in data %}
+            <tr>
+                <td  class="cname">{{i.client_name}}</td>
+                <td>{{i.request_synopsis}}</td>
+                <td>{{i.client_type}}</td>
+                <td class="reqcd">{{i.request_created_date}}</td>
+                <td>{{i.target_launch_date}}</td>
+                <td>{{i.estimated_date}}</td>
+<!--                <td>{{i.actual_live_date}}</td>-->
+<!--                <td>{{i.ontime_status}}</td>-->
+<!--                <td>{{i.current_status}}</td>-->
+<!--                <td>{{i.approval}}</td>-->
+<!--                <td>{{i.remarks}}</td>-->
+<!--                <td>{{i.action}}</td>-->
+                <td class="setest">
+                    <form method="post" action="{% url 'infofill:estdate' i.id %}" class="date-form">
+                        {% csrf_token %}
+                        {% if i.estimated_date is not None %}
+                            <input type="date" name="_date" disabled>
+                            <input type="submit" name="_dateSubmit" value="&#xf0c7" class="fas fa-save btn-save" disabled>
+                        {% endif %}
+                        {% if i.estimated_date is None %}
+                            <input type="date" name="_date"  >
+                            <input type="submit" name="_dateSubmit" value="&#xf0c7" class="fas fa-save btn-save">
+
+                        {% endif %}
+                        <span class="divider"></span>
+                        <input type="submit" name="_close" value="Done" class="btn-close" onclick="loader()">
+                    </form>
+                </td>
+
+<!--                <td><a href="/admin/infofill/fillup/{{i.id}}/change/">Set Est.Date</a></td>-->
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+</div>
+
+<!--<div class="container-fluid cont2 tabcontent" id="Completed2">-->
+<!--    <div class="tb-header">-->
+<!--        <table  class="client-details" cellpadding="4">-->
+<!--            <thead>-->
+<!--                <tr>-->
+<!--                    <th>Cient name</th>-->
+<!--                    <th class="req">Request Synopsis</th>-->
+<!--                    <th>Client Type</th>-->
+<!--                    <th>Request receive date</th>-->
+<!--                    <th>Target launch date</th>-->
+<!--                    <th>Estimated Date</th>-->
+<!--            &lt;!&ndash;        <th>Actual live date</th>&ndash;&gt;-->
+<!--            &lt;!&ndash;        <th>Ontime Status</th>&ndash;&gt;-->
+<!--            &lt;!&ndash;        <th>Current status</th>&ndash;&gt;-->
+<!--            &lt;!&ndash;        <th>Approval</th>&ndash;&gt;-->
+<!--            &lt;!&ndash;        <th>Remarks</th>&ndash;&gt;-->
+<!--            &lt;!&ndash;        <th>Action</th>&ndash;&gt;-->
+<!--&lt;!&ndash;                    <th>Set estimated Date</th>&ndash;&gt;-->
+<!--                  </tr>-->
+<!--            </thead>-->
+<!--        </table>-->
+<!--    </div>-->
+
+<!--    <div class="tb-content">-->
+<!--        <table class="client-details" cellpadding="4">-->
+
+<!--        {% for i in comp %}-->
+<!--            <tr>-->
+<!--                <td>{{i.client_name}}</td>-->
+<!--                <td class="req">{{i.request_synopsis}}</td>-->
+<!--                <td>{{i.client_type}}</td>-->
+<!--                <td>{{i.request_created_date}}</td>-->
+<!--                <td>{{i.target_launch_date}}</td>-->
+<!--                <td>{{i.estimated_date}}</td>-->
+<!--&lt;!&ndash;                <td>{{i.actual_live_date}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{i.ontime_status}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{i.current_status}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{i.approval}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{i.remarks}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <td>{{i.action}}</td>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                <td><a href="/admin/infofill/fillup/{{i.id}}/change/">Set Est.Date</a></td>&ndash;&gt;-->
+<!--            </tr>-->
+<!--        {% endfor %}-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<script>
+
+    function loader(){
+        var pageLoader = document.getElementById('pageLoader');
+        pageLoader.style.display = "grid";
+    }
+
+<!--    function tab(evt, tabname) {-->
+<!--      var tabcontent = document.getElementsByClassName("tabcontent");-->
+<!--      for (i = 0; i < tabcontent.length; i++) {-->
+<!--        tabcontent[i].style.display = "none";-->
+<!--      }-->
+<!--      tablinks = document.getElementsByClassName("tablinks");-->
+<!--      for (i = 0; i < tablinks.length; i++) {-->
+<!--        tablinks[i].className = tablinks[i].className.replace(" active", "");-->
+<!--      }-->
+<!--      document.getElementById(tabname).style.display = "block";-->
+<!--      evt.currentTarget.className += " active";-->
+<!--    }-->
+
+</script>
+
+
+
+</body>
+</html>
